@@ -1,0 +1,14 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin | KOMSAY QUESTBOARD</title><link rel="icon" href="icon.jpg"><link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script></head>
+<body>
+<div class="login hide" id="login"><div class="card"><img src="icon.jpg" alt="Logo"><h2 style="text-align:center">Welcome back</h2><p class="sub" style="text-align:center;margin-bottom:14px">Sign in to manage participants and points.</p>
+  <div class="flash err hide" id="lerr"></div>
+  <form id="lf"><label>Email</label><input type="email" name="email" required autofocus><label style="display:block;margin-top:12px">Password</label><input type="password" name="password" required>
+  <button class="btn p" style="width:100%;margin-top:18px">Sign In</button></form></div></div>
+<div id="app" class="hide">
+  <nav class="side"><div class="brand"><img src="icon.jpg" alt="">Komsay</div>
+    <a href="#dashboard">Dashboard</a><a href="#participants">Participants</a><a href="#reports">Reports</a><a href="#history">History</a><a href="/">Public board</a><a href="#" class="out" id="out">Logout</a></nav>
+  <main class="main" id="view"></main>
+</div>
+<script src="admin.js"></script></body></html>

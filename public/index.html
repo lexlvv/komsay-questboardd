@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leaderboard | KOMSAY QUESTBOARD</title><link rel="icon" href="icon.jpg"><link rel="stylesheet" href="styles.css"></head>
+<body>
+<div class="hero"><img src="icon.jpg" alt="Komsay Questboard logo"><h1>KOMSAY QUESTBOARD</h1><p>Live leaderboard of the Computer Science Student Organization</p></div>
+<div class="wrap">
+  <div class="tiles"><div class="tile"><b id="n">-</b><span>Participants</span></div><div class="tile"><b id="pts">-</b><span>Total points</span></div><div class="tile"><b id="top">-</b><span>Top participant</span></div></div>
+  <div class="card"><div class="tools"><input id="q" type="search" placeholder="Search a name…" aria-label="Search"><span class="sub" id="upd"></span></div>
+    <div style="overflow-x:auto"><table><thead><tr><th>Rank</th><th>Participant</th><th class="hide-sm">Joined</th><th>Points</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+  <p class="sub" style="text-align:center;margin-top:16px">Refreshes every minute · <a href="admin.html">Admin</a></p>
+</div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Number(n||0).toLocaleString(),dt=x=>new Date(x).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+async function load(){
+  try{const j=await(await fetch('/api/leaderboard?q='+encodeURIComponent($('#q').value))).json();
+  $('#n').textContent=fmt(j.total);$('#pts').textContent=fmt(j.points);$('#top').textContent=j.top?j.top.name:'-';
+  $('#upd').textContent=j.updated?'Last updated '+new Date(j.updated).toLocaleString():'';
+  let rank=0,prev=null;
+  $('#rows').innerHTML=j.rows.length?j.rows.map((p,i)=>{if(p.total_points!==prev){rank=i+1;prev=p.total_points}
+    return `<tr><td class="medal">${['🥇','🥈','🥉'][rank-1]||'#'+rank}</td><td><div class="who"><div class="av">${esc(p.name.slice(0,2).toUpperCase())}</div>${esc(p.name)}</div></td><td class="hide-sm em">${dt(p.date_joined)}</td><td class="pts">${fmt(p.total_points)} ⭐</td></tr>`}).join(''):'<tr><td colspan="4" class="em" style="text-align:center;padding:30px">No participants yet.</td></tr>';
+  }catch(e){$('#rows').innerHTML='<tr><td colspan="4" class="em">Could not load the leaderboard.</td></tr>'}
+}
+$('#q').addEventListener('input',load);load().then(()=>{if(location.search.includes('print=1'))setTimeout(print,300)});setInterval(load,60000);
+</script></body></html>
